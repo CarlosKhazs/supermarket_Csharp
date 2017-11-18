@@ -1,0 +1,616 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="projetoCNETModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Cargo">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Descricao" Type="varchar" MaxLength="80" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Categoria">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Descricao" Type="varchar" MaxLength="80" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Cliente">
+          <Key>
+            <PropertyRef Name="idPessoa" />
+          </Key>
+          <Property Name="idPessoa" Type="int" Nullable="false" />
+          <Property Name="CPF" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Funcionario">
+          <Key>
+            <PropertyRef Name="idPessoa" />
+          </Key>
+          <Property Name="idPessoa" Type="int" Nullable="false" />
+          <Property Name="Salario" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Funcionario_Cargo">
+          <Key>
+            <PropertyRef Name="idCargo" />
+            <PropertyRef Name="idPessoa" />
+          </Key>
+          <Property Name="idCargo" Type="int" Nullable="false" />
+          <Property Name="idPessoa" Type="int" Nullable="false" />
+          <Property Name="DataInicio" Type="datetime" Nullable="false" />
+          <Property Name="DataFim" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Item_Venda">
+          <Key>
+            <PropertyRef Name="idProduto" />
+            <PropertyRef Name="idVenda" />
+          </Key>
+          <Property Name="idProduto" Type="int" Nullable="false" />
+          <Property Name="idVenda" Type="int" Nullable="false" />
+          <Property Name="Quantidade" Type="int" Nullable="false" />
+          <Property Name="ValorUnitario" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Pessoa">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nome" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Produto">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nome" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="idPromocao" Type="int" Nullable="false" />
+          <Property Name="idCategoria" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Promocao">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ValorDesconto" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Venda">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Data" Type="datetime" Nullable="false" />
+          <Property Name="idPessoa" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="Cargo_Funcionario_Cargo_fk">
+          <End Role="Cargo" Type="Self.Cargo" Multiplicity="1" />
+          <End Role="Funcionario_Cargo" Type="Self.Funcionario_Cargo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cargo">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Funcionario_Cargo">
+              <PropertyRef Name="idCargo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Categoria_Produto_fk">
+          <End Role="Categoria" Type="Self.Categoria" Multiplicity="1" />
+          <End Role="Produto" Type="Self.Produto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categoria">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Produto">
+              <PropertyRef Name="idCategoria" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Cliente_Venda_fk">
+          <End Role="Cliente" Type="Self.Cliente" Multiplicity="1" />
+          <End Role="Venda" Type="Self.Venda" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cliente">
+              <PropertyRef Name="idPessoa" />
+            </Principal>
+            <Dependent Role="Venda">
+              <PropertyRef Name="idPessoa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Funcionario_Funcionario_Cargo_fk">
+          <End Role="Funcionario" Type="Self.Funcionario" Multiplicity="1" />
+          <End Role="Funcionario_Cargo" Type="Self.Funcionario_Cargo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Funcionario">
+              <PropertyRef Name="idPessoa" />
+            </Principal>
+            <Dependent Role="Funcionario_Cargo">
+              <PropertyRef Name="idPessoa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Pessoa_Cliente_fk">
+          <End Role="Pessoa" Type="Self.Pessoa" Multiplicity="1" />
+          <End Role="Cliente" Type="Self.Cliente" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Pessoa">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Cliente">
+              <PropertyRef Name="idPessoa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Pessoa_Vendedor_fk">
+          <End Role="Pessoa" Type="Self.Pessoa" Multiplicity="1" />
+          <End Role="Funcionario" Type="Self.Funcionario" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Pessoa">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Funcionario">
+              <PropertyRef Name="idPessoa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Produto_Item_Venda_fk">
+          <End Role="Produto" Type="Self.Produto" Multiplicity="1" />
+          <End Role="Item_Venda" Type="Self.Item_Venda" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Produto">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Item_Venda">
+              <PropertyRef Name="idProduto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Promocao_Produto_fk">
+          <End Role="Promocao" Type="Self.Promocao" Multiplicity="1" />
+          <End Role="Produto" Type="Self.Produto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Promocao">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Produto">
+              <PropertyRef Name="idPromocao" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Venda_Item_Venda_fk">
+          <End Role="Venda" Type="Self.Venda" Multiplicity="1" />
+          <End Role="Item_Venda" Type="Self.Item_Venda" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Venda">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Item_Venda">
+              <PropertyRef Name="idVenda" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="projetoCNETModelStoreContainer">
+          <EntitySet Name="Cargo" EntityType="Self.Cargo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Categoria" EntityType="Self.Categoria" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Cliente" EntityType="Self.Cliente" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Funcionario" EntityType="Self.Funcionario" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Funcionario_Cargo" EntityType="Self.Funcionario_Cargo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Item_Venda" EntityType="Self.Item_Venda" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Pessoa" EntityType="Self.Pessoa" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Produto" EntityType="Self.Produto" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Promocao" EntityType="Self.Promocao" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Venda" EntityType="Self.Venda" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="Cargo_Funcionario_Cargo_fk" Association="Self.Cargo_Funcionario_Cargo_fk">
+            <End Role="Cargo" EntitySet="Cargo" />
+            <End Role="Funcionario_Cargo" EntitySet="Funcionario_Cargo" />
+          </AssociationSet>
+          <AssociationSet Name="Categoria_Produto_fk" Association="Self.Categoria_Produto_fk">
+            <End Role="Categoria" EntitySet="Categoria" />
+            <End Role="Produto" EntitySet="Produto" />
+          </AssociationSet>
+          <AssociationSet Name="Cliente_Venda_fk" Association="Self.Cliente_Venda_fk">
+            <End Role="Cliente" EntitySet="Cliente" />
+            <End Role="Venda" EntitySet="Venda" />
+          </AssociationSet>
+          <AssociationSet Name="Funcionario_Funcionario_Cargo_fk" Association="Self.Funcionario_Funcionario_Cargo_fk">
+            <End Role="Funcionario" EntitySet="Funcionario" />
+            <End Role="Funcionario_Cargo" EntitySet="Funcionario_Cargo" />
+          </AssociationSet>
+          <AssociationSet Name="Pessoa_Cliente_fk" Association="Self.Pessoa_Cliente_fk">
+            <End Role="Pessoa" EntitySet="Pessoa" />
+            <End Role="Cliente" EntitySet="Cliente" />
+          </AssociationSet>
+          <AssociationSet Name="Pessoa_Vendedor_fk" Association="Self.Pessoa_Vendedor_fk">
+            <End Role="Pessoa" EntitySet="Pessoa" />
+            <End Role="Funcionario" EntitySet="Funcionario" />
+          </AssociationSet>
+          <AssociationSet Name="Produto_Item_Venda_fk" Association="Self.Produto_Item_Venda_fk">
+            <End Role="Produto" EntitySet="Produto" />
+            <End Role="Item_Venda" EntitySet="Item_Venda" />
+          </AssociationSet>
+          <AssociationSet Name="Promocao_Produto_fk" Association="Self.Promocao_Produto_fk">
+            <End Role="Promocao" EntitySet="Promocao" />
+            <End Role="Produto" EntitySet="Produto" />
+          </AssociationSet>
+          <AssociationSet Name="Venda_Item_Venda_fk" Association="Self.Venda_Item_Venda_fk">
+            <End Role="Venda" EntitySet="Venda" />
+            <End Role="Item_Venda" EntitySet="Item_Venda" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="projetoCNETModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Cargo">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="Descricao" Type="String" MaxLength="80" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Funcionario_Cargo" Relationship="Self.Cargo_Funcionario_Cargo_fk" FromRole="Cargo" ToRole="Funcionario_Cargo" />
+        </EntityType>
+        <EntityType Name="Categoria">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="Descricao" Type="String" MaxLength="80" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Produto" Relationship="Self.Categoria_Produto_fk" FromRole="Categoria" ToRole="Produto" />
+        </EntityType>
+        <EntityType Name="Cliente">
+          <Key>
+            <PropertyRef Name="idPessoa" />
+          </Key>
+          <Property Name="idPessoa" Type="Int32" Nullable="false" />
+          <Property Name="CPF" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Venda" Relationship="Self.Cliente_Venda_fk" FromRole="Cliente" ToRole="Venda" />
+          <NavigationProperty Name="Pessoa" Relationship="Self.Pessoa_Cliente_fk" FromRole="Cliente" ToRole="Pessoa" />
+        </EntityType>
+        <EntityType Name="Funcionario">
+          <Key>
+            <PropertyRef Name="idPessoa" />
+          </Key>
+          <Property Name="idPessoa" Type="Int32" Nullable="false" />
+          <Property Name="Salario" Type="Double" Nullable="false" />
+          <NavigationProperty Name="Funcionario_Cargo" Relationship="Self.Funcionario_Funcionario_Cargo_fk" FromRole="Funcionario" ToRole="Funcionario_Cargo" />
+          <NavigationProperty Name="Pessoa" Relationship="Self.Pessoa_Vendedor_fk" FromRole="Funcionario" ToRole="Pessoa" />
+        </EntityType>
+        <EntityType Name="Funcionario_Cargo">
+          <Key>
+            <PropertyRef Name="idCargo" />
+            <PropertyRef Name="idPessoa" />
+          </Key>
+          <Property Name="idCargo" Type="Int32" Nullable="false" />
+          <Property Name="idPessoa" Type="Int32" Nullable="false" />
+          <Property Name="DataInicio" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DataFim" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Cargo" Relationship="Self.Cargo_Funcionario_Cargo_fk" FromRole="Funcionario_Cargo" ToRole="Cargo" />
+          <NavigationProperty Name="Funcionario" Relationship="Self.Funcionario_Funcionario_Cargo_fk" FromRole="Funcionario_Cargo" ToRole="Funcionario" />
+        </EntityType>
+        <EntityType Name="Item_Venda">
+          <Key>
+            <PropertyRef Name="idProduto" />
+            <PropertyRef Name="idVenda" />
+          </Key>
+          <Property Name="idProduto" Type="Int32" Nullable="false" />
+          <Property Name="idVenda" Type="Int32" Nullable="false" />
+          <Property Name="Quantidade" Type="Int32" Nullable="false" />
+          <Property Name="ValorUnitario" Type="Double" Nullable="false" />
+          <NavigationProperty Name="Produto" Relationship="Self.Produto_Item_Venda_fk" FromRole="Item_Venda" ToRole="Produto" />
+          <NavigationProperty Name="Venda" Relationship="Self.Venda_Item_Venda_fk" FromRole="Item_Venda" ToRole="Venda" />
+        </EntityType>
+        <EntityType Name="Pessoa">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="Nome" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Cliente" Relationship="Self.Pessoa_Cliente_fk" FromRole="Pessoa" ToRole="Cliente" />
+          <NavigationProperty Name="Funcionario" Relationship="Self.Pessoa_Vendedor_fk" FromRole="Pessoa" ToRole="Funcionario" />
+        </EntityType>
+        <EntityType Name="Produto">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nome" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="idPromocao" Type="Int32" Nullable="false" />
+          <Property Name="idCategoria" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Categoria" Relationship="Self.Categoria_Produto_fk" FromRole="Produto" ToRole="Categoria" />
+          <NavigationProperty Name="Item_Venda" Relationship="Self.Produto_Item_Venda_fk" FromRole="Produto" ToRole="Item_Venda" />
+          <NavigationProperty Name="Promocao" Relationship="Self.Promocao_Produto_fk" FromRole="Produto" ToRole="Promocao" />
+        </EntityType>
+        <EntityType Name="Promocao">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="ValorDesconto" Type="Double" Nullable="false" />
+          <NavigationProperty Name="Produto" Relationship="Self.Promocao_Produto_fk" FromRole="Promocao" ToRole="Produto" />
+        </EntityType>
+        <EntityType Name="Venda">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="Data" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="idPessoa" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Cliente" Relationship="Self.Cliente_Venda_fk" FromRole="Venda" ToRole="Cliente" />
+          <NavigationProperty Name="Item_Venda" Relationship="Self.Venda_Item_Venda_fk" FromRole="Venda" ToRole="Item_Venda" />
+        </EntityType>
+        <Association Name="Cargo_Funcionario_Cargo_fk">
+          <End Role="Cargo" Type="Self.Cargo" Multiplicity="1" />
+          <End Role="Funcionario_Cargo" Type="Self.Funcionario_Cargo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cargo">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Funcionario_Cargo">
+              <PropertyRef Name="idCargo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Categoria_Produto_fk">
+          <End Role="Categoria" Type="Self.Categoria" Multiplicity="1" />
+          <End Role="Produto" Type="Self.Produto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categoria">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Produto">
+              <PropertyRef Name="idCategoria" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Cliente_Venda_fk">
+          <End Role="Cliente" Type="Self.Cliente" Multiplicity="1" />
+          <End Role="Venda" Type="Self.Venda" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cliente">
+              <PropertyRef Name="idPessoa" />
+            </Principal>
+            <Dependent Role="Venda">
+              <PropertyRef Name="idPessoa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Pessoa_Cliente_fk">
+          <End Role="Pessoa" Type="Self.Pessoa" Multiplicity="1" />
+          <End Role="Cliente" Type="Self.Cliente" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Pessoa">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Cliente">
+              <PropertyRef Name="idPessoa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Funcionario_Funcionario_Cargo_fk">
+          <End Role="Funcionario" Type="Self.Funcionario" Multiplicity="1" />
+          <End Role="Funcionario_Cargo" Type="Self.Funcionario_Cargo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Funcionario">
+              <PropertyRef Name="idPessoa" />
+            </Principal>
+            <Dependent Role="Funcionario_Cargo">
+              <PropertyRef Name="idPessoa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Pessoa_Vendedor_fk">
+          <End Role="Pessoa" Type="Self.Pessoa" Multiplicity="1" />
+          <End Role="Funcionario" Type="Self.Funcionario" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Pessoa">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Funcionario">
+              <PropertyRef Name="idPessoa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Produto_Item_Venda_fk">
+          <End Role="Produto" Type="Self.Produto" Multiplicity="1" />
+          <End Role="Item_Venda" Type="Self.Item_Venda" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Produto">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Item_Venda">
+              <PropertyRef Name="idProduto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Venda_Item_Venda_fk">
+          <End Role="Venda" Type="Self.Venda" Multiplicity="1" />
+          <End Role="Item_Venda" Type="Self.Item_Venda" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Venda">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Item_Venda">
+              <PropertyRef Name="idVenda" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Promocao_Produto_fk">
+          <End Role="Promocao" Type="Self.Promocao" Multiplicity="1" />
+          <End Role="Produto" Type="Self.Produto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Promocao">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Produto">
+              <PropertyRef Name="idPromocao" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="projetoCNETEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Cargo" EntityType="Self.Cargo" />
+          <EntitySet Name="Categoria" EntityType="Self.Categoria" />
+          <EntitySet Name="Cliente" EntityType="Self.Cliente" />
+          <EntitySet Name="Funcionario" EntityType="Self.Funcionario" />
+          <EntitySet Name="Funcionario_Cargo" EntityType="Self.Funcionario_Cargo" />
+          <EntitySet Name="Item_Venda" EntityType="Self.Item_Venda" />
+          <EntitySet Name="Pessoa" EntityType="Self.Pessoa" />
+          <EntitySet Name="Produto" EntityType="Self.Produto" />
+          <EntitySet Name="Promocao" EntityType="Self.Promocao" />
+          <EntitySet Name="Venda" EntityType="Self.Venda" />
+          <AssociationSet Name="Cargo_Funcionario_Cargo_fk" Association="Self.Cargo_Funcionario_Cargo_fk">
+            <End Role="Cargo" EntitySet="Cargo" />
+            <End Role="Funcionario_Cargo" EntitySet="Funcionario_Cargo" />
+          </AssociationSet>
+          <AssociationSet Name="Categoria_Produto_fk" Association="Self.Categoria_Produto_fk">
+            <End Role="Categoria" EntitySet="Categoria" />
+            <End Role="Produto" EntitySet="Produto" />
+          </AssociationSet>
+          <AssociationSet Name="Cliente_Venda_fk" Association="Self.Cliente_Venda_fk">
+            <End Role="Cliente" EntitySet="Cliente" />
+            <End Role="Venda" EntitySet="Venda" />
+          </AssociationSet>
+          <AssociationSet Name="Pessoa_Cliente_fk" Association="Self.Pessoa_Cliente_fk">
+            <End Role="Pessoa" EntitySet="Pessoa" />
+            <End Role="Cliente" EntitySet="Cliente" />
+          </AssociationSet>
+          <AssociationSet Name="Funcionario_Funcionario_Cargo_fk" Association="Self.Funcionario_Funcionario_Cargo_fk">
+            <End Role="Funcionario" EntitySet="Funcionario" />
+            <End Role="Funcionario_Cargo" EntitySet="Funcionario_Cargo" />
+          </AssociationSet>
+          <AssociationSet Name="Pessoa_Vendedor_fk" Association="Self.Pessoa_Vendedor_fk">
+            <End Role="Pessoa" EntitySet="Pessoa" />
+            <End Role="Funcionario" EntitySet="Funcionario" />
+          </AssociationSet>
+          <AssociationSet Name="Produto_Item_Venda_fk" Association="Self.Produto_Item_Venda_fk">
+            <End Role="Produto" EntitySet="Produto" />
+            <End Role="Item_Venda" EntitySet="Item_Venda" />
+          </AssociationSet>
+          <AssociationSet Name="Venda_Item_Venda_fk" Association="Self.Venda_Item_Venda_fk">
+            <End Role="Venda" EntitySet="Venda" />
+            <End Role="Item_Venda" EntitySet="Item_Venda" />
+          </AssociationSet>
+          <AssociationSet Name="Promocao_Produto_fk" Association="Self.Promocao_Produto_fk">
+            <End Role="Promocao" EntitySet="Promocao" />
+            <End Role="Produto" EntitySet="Produto" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="projetoCNETModelStoreContainer" CdmEntityContainer="projetoCNETEntities">
+          <EntitySetMapping Name="Cargo">
+            <EntityTypeMapping TypeName="projetoCNETModel.Cargo">
+              <MappingFragment StoreEntitySet="Cargo">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Descricao" ColumnName="Descricao" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Categoria">
+            <EntityTypeMapping TypeName="projetoCNETModel.Categoria">
+              <MappingFragment StoreEntitySet="Categoria">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Descricao" ColumnName="Descricao" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Cliente">
+            <EntityTypeMapping TypeName="projetoCNETModel.Cliente">
+              <MappingFragment StoreEntitySet="Cliente">
+                <ScalarProperty Name="idPessoa" ColumnName="idPessoa" />
+                <ScalarProperty Name="CPF" ColumnName="CPF" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Funcionario">
+            <EntityTypeMapping TypeName="projetoCNETModel.Funcionario">
+              <MappingFragment StoreEntitySet="Funcionario">
+                <ScalarProperty Name="idPessoa" ColumnName="idPessoa" />
+                <ScalarProperty Name="Salario" ColumnName="Salario" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Funcionario_Cargo">
+            <EntityTypeMapping TypeName="projetoCNETModel.Funcionario_Cargo">
+              <MappingFragment StoreEntitySet="Funcionario_Cargo">
+                <ScalarProperty Name="idCargo" ColumnName="idCargo" />
+                <ScalarProperty Name="idPessoa" ColumnName="idPessoa" />
+                <ScalarProperty Name="DataInicio" ColumnName="DataInicio" />
+                <ScalarProperty Name="DataFim" ColumnName="DataFim" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Item_Venda">
+            <EntityTypeMapping TypeName="projetoCNETModel.Item_Venda">
+              <MappingFragment StoreEntitySet="Item_Venda">
+                <ScalarProperty Name="idProduto" ColumnName="idProduto" />
+                <ScalarProperty Name="idVenda" ColumnName="idVenda" />
+                <ScalarProperty Name="Quantidade" ColumnName="Quantidade" />
+                <ScalarProperty Name="ValorUnitario" ColumnName="ValorUnitario" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Pessoa">
+            <EntityTypeMapping TypeName="projetoCNETModel.Pessoa">
+              <MappingFragment StoreEntitySet="Pessoa">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Nome" ColumnName="Nome" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Produto">
+            <EntityTypeMapping TypeName="projetoCNETModel.Produto">
+              <MappingFragment StoreEntitySet="Produto">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Nome" ColumnName="Nome" />
+                <ScalarProperty Name="idPromocao" ColumnName="idPromocao" />
+                <ScalarProperty Name="idCategoria" ColumnName="idCategoria" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Promocao">
+            <EntityTypeMapping TypeName="projetoCNETModel.Promocao">
+              <MappingFragment StoreEntitySet="Promocao">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="ValorDesconto" ColumnName="ValorDesconto" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Venda">
+            <EntityTypeMapping TypeName="projetoCNETModel.Venda">
+              <MappingFragment StoreEntitySet="Venda">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Data" ColumnName="Data" />
+                <ScalarProperty Name="idPessoa" ColumnName="idPessoa" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
